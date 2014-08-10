@@ -33,12 +33,10 @@ exclude some records.
 
 #### test.yml as blows
 
-  <p>
-  hoge: 100
-  moge:
-   - ^aaa
+  <p>hoge: 100</p>
+  <p>moge:</p>
+  <p> - ^aaa</p>
    - bbb
-  </p>
 
 #### Assuming following inputs are coming:
     test.aa: {"json":"dayo"}
