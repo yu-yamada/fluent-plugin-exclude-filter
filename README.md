@@ -21,7 +21,7 @@ exclude some records.
     test.aa: {"json":"dayo"}
     test.aa: {"hoge":"100"}
 #### then output bocomes as belows
-    test.aa: {"json":"dayo"} 
+    debug.test.aa: {"json":"dayo"} 
 
 ### Use YmlFile exclude
     <match test.**>
@@ -45,9 +45,9 @@ exclude some records.
     test.aa: {"moge":"aaa ccc"}
     test.aa: {"moge":"ccc ddd"}
 #### then output bocomes as belows
-    test.aa: {"json":"dayo"} 
-    test.aa: {"hoge":"200"}
-    test.aa: {"moge":"ccc ddd"}
+    debug.test.aa: {"json":"dayo"} 
+    debug.test.aa: {"hoge":"200"}
+    debug.test.aa: {"moge":"ccc ddd"}
 
 
 ## Copyright
