@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["yu.yamada07@gmail.com"]
   spec.description   = %q{Output filter plugin to exclude records}
   spec.summary       = %q{Output filter plugin to exclude records}
-  spec.homepage      = "://github.com/yu-yamada/fluent-plugin-exclude-filter"
+  spec.homepage      = "https://github.com/yu-yamada/fluent-plugin-exclude-filter"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
