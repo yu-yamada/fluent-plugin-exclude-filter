@@ -1,6 +1,6 @@
 require 'yaml'
 class Fluent::ExcludeFilterOutput < Fluent::Output
-  Fluent::Plugin.register_output('exclude-filter', self)
+  Fluent::Plugin.register_output('exclude_filter', self)
 
   config_param :key, :string, :default => nil
   config_param :value, :string, :default => nil
