@@ -23,7 +23,7 @@ exclude some records.
 #### then output bocomes as belows
     test.aa: {"json":"dayo"} 
 
-### Simple exclude
+### Use YmlFile exclude
     <match test.**>
       type exclude-filter
       file_path path/to/test.yml 
