@@ -32,11 +32,12 @@ exclude some records.
     </match>  
 
 #### test.yml as blows
+  <pre>
   hoge: 100
   moge:
    - ^aaa
    - bbb
-
+  </pre>
 #### Assuming following inputs are coming:
     test.aa: {"json":"dayo"}
     test.aa: {"hoge":"100"}
