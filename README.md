@@ -35,8 +35,8 @@ exclude some records.
 
   <p>hoge: 100</p>
   <p>moge:</p>
-  <p> - ^aaa</p>
-   - bbb
+  <p>  - ^aaa</p>
+  <p>  - bbb</p>
 
 #### Assuming following inputs are coming:
     test.aa: {"json":"dayo"}
