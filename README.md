@@ -10,7 +10,7 @@ exclude some records.
 
 ### Simple exclude
     <match test.**>
-      type exclude-filter
+      type exclude_filter
       key hoge
       value 100
       regexp false # default false, string comparison
@@ -25,7 +25,7 @@ exclude some records.
 
 ### Use YmlFile exclude
     <match test.**>
-      type exclude-filter
+      type exclude_filter
       file_path path/to/test.yml 
       regexp true # default false
       add_tag_prefix debug
