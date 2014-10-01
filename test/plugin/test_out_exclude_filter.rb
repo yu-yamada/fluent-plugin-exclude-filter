@@ -26,7 +26,7 @@ class ExcludeFilterOutputTest < Test::Unit::TestCase
     assert_equal '100', d.instance.config['value']
   end
 
-  def test_format
+  def test_simple
     d = create_driver
     d.run do
       d.emit("json" => "dayo")
@@ -35,5 +35,24 @@ class ExcludeFilterOutputTest < Test::Unit::TestCase
   
     assert_equal [ {"json" => "dayo"} ], d.records 
     
+  end
+  def test_yml
+    yml_path = File.dirname(__FILE__) + "/../conf/test.yml"
+
+    d = create_driver %[
+          file_path #{yml_path}
+          regexp true
+          add_tag_prefix debug
+        ]
+
+    d.run do
+      d.emit("json" => "dayo")
+      d.emit("hoge" => "100")
+      d.emit("hoge" => "200")
+      d.emit("moge" => "aaa bbb")
+      d.emit("moge" => "aaa ccc")
+      d.emit("moge" => "ccc ddd")
+    end
+    assert_equal [ {"json"=>"dayo"}, {"hoge"=>"200"}, {"moge"=>"ccc ddd"} ], d.records 
   end
 end 
