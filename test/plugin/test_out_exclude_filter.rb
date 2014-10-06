@@ -2,35 +2,57 @@ require 'helper'
 
 
 class ExcludeFilterOutputTest < Test::Unit::TestCase
-  # TMP_DIR = File.dirname(__FILE__) + "/../tmp"
 
   def setup
     Fluent::Test.setup
-    # FileUtils.rm_rf(TMP_DIR)
-    # FileUtils.mkdir_p(TMP_DIR)
   end
 
   CONFIG = %[
+    key hoge
+    value 100
+    regexp false
+    add_tag_prefix debug
   ]
-  # CONFIG = %[
-  #   path #{TMP_DIR}/out_file_test
-  #   compress gz
-  #   utc
-  # ]
 
   def create_driver(conf = CONFIG)
-    Fluent::Test::BufferedOutputTestDriver.new(Fluent::ExcludeFilterOutput).configure(conf)
+    Fluent::Test::OutputTestDriver.new(Fluent::ExcludeFilterOutput).configure(conf)
   end
 
   def test_configure
-    #### set configurations
-    # d = create_driver %[
-    #   path test_path
-    #   compress gz
-    # ]
-    #### check configurations
-    # assert_equal 'test_path', d.instance.path
-    # assert_equal :gz, d.instance.compress
+    d = create_driver
+
+    assert_equal 'debug', d.instance.config['add_tag_prefix']
+    assert_equal 'hoge', d.instance.config['key']
+    assert_equal '100', d.instance.config['value']
   end
 
+  def test_simple
+    d = create_driver
+    d.run do
+      d.emit("json" => "dayo")
+      d.emit("hoge" => "100")
+    end
+  
+    assert_equal [ {"json" => "dayo"} ], d.records 
+    
+  end
+  def test_yml
+    yml_path = File.dirname(__FILE__) + "/../conf/test.yml"
+
+    d = create_driver %[
+          file_path #{yml_path}
+          regexp true
+          add_tag_prefix debug
+        ]
+
+    d.run do
+      d.emit("json" => "dayo")
+      d.emit("hoge" => "100")
+      d.emit("hoge" => "200")
+      d.emit("moge" => "aaa bbb")
+      d.emit("moge" => "aaa ccc")
+      d.emit("moge" => "ccc ddd")
+    end
+    assert_equal [ {"json"=>"dayo"}, {"hoge"=>"200"}, {"moge"=>"ccc ddd"} ], d.records 
+  end
 end 

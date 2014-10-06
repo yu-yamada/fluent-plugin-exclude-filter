@@ -1,0 +1,4 @@
+hoge: 100
+moge:
+ - ^aaa
+ - bbb
