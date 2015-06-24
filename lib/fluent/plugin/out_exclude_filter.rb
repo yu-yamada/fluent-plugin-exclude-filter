@@ -1,52 +1,72 @@
 require 'yaml'
 class Fluent::ExcludeFilterOutput < Fluent::Output
+  include Fluent::HandleTagNameMixin
+
   Fluent::Plugin.register_output('exclude_filter', self)
 
   config_param :key, :string, :default => nil
   config_param :value, :string, :default => nil
   config_param :file_path, :string, :default => nil
   config_param :regexp, :bool, :default => false
-  config_param :add_tag_prefix, :string, :default => 'exclude'
 
   def initialize
     super
+    @excluded = nil
   end
+
+  attr_reader :excluded
 
   def configure(conf)
     super
-
-    @key = @key.to_s
-    @value = @value.to_s 
-    @tag_prefix = "#{@add_tag_prefix}."
-
-    @tag_proc =
-      if @tag_prefix
-        Proc.new {|tag| "#{@tag_prefix}#{tag}" }
-      else
-        Proc.new {|tag| tag }
-      end
 
    @excludes_yml = nil
    if @file_path
      @excludes_yml = YAML.load_file(@file_path)
    end 
+
+    store_excluded_conf = conf.elements.select {|element|
+      element.name == 'excluded'
+    }
+    case store_excluded_conf.length
+    when 0
+      @excluded = nil
+    when 1
+      e = store_excluded_conf[0]
+      @excluded = TagNameMixer.new()
+      @excluded.configure(e)
+    else
+      raise Fluent::ConfigError, "exclude_filter: <excluded> directive should be defined only once."
+    end
   end
 
   def emit(tag, es, chain)
-    emit_tag = @tag_proc.call(tag)
 
     es.each do |time,record|
-      if @key && @value
-        next if match(@key, @value, record) 
+      if any_match(record)
+        if @excluded
+          emit_tag = tag.dup
+          @excluded.filter_record(emit_tag, time, record)
+          Fluent::Engine.emit(emit_tag, time, record)
+        end
+        next
       end
-      if @excludes_yml
-        next if yml_match(record)
-      end 
 
+      emit_tag = tag.dup
+      filter_record(emit_tag, time, record)
       Fluent::Engine.emit(emit_tag, time, record)
     end
 
     chain.next
+  end
+
+  def any_match(record)
+    if @key && @value
+      return true if match(@key, @value, record) 
+    end
+    if @excludes_yml
+      return true if yml_match(record)
+    end 
+    return false
   end
 
   def yml_match(record)
@@ -72,4 +92,9 @@ class Fluent::ExcludeFilterOutput < Fluent::Output
       return record[k] == v.to_s
     end
   end 
+
+  class TagNameMixer < Object
+    include Fluent::Configurable
+    include Fluent::HandleTagNameMixin
+  end
 end
