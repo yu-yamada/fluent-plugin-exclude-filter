@@ -33,10 +33,12 @@ exclude some records.
 
 #### test.yml as blows
 
-  <p>hoge: 100</p>
-  <p>moge:</p>
-  <p>  - ^aaa</p>
-  <p>  - bbb</p>
+```
+hoge: 100
+moge:
+  - ^aaa
+  - bbb
+```
 
 #### Assuming following inputs are coming:
     test.aa: {"json":"dayo"}
@@ -45,7 +47,7 @@ exclude some records.
     test.aa: {"moge":"aaa bbb"}
     test.aa: {"moge":"aaa ccc"}
     test.aa: {"moge":"ccc ddd"}
-#### then output bocomes as belows
+#### then output becomes as belows
     debug.test.aa: {"json":"dayo"} 
     debug.test.aa: {"hoge":"200"}
     debug.test.aa: {"moge":"ccc ddd"}
