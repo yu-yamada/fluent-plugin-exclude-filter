@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+- 2.2
+- 2.1
+- 2.0.0
+- 1.9.3
+bundler_args: --jobs=2
+script: rake test
+branches:
+  only:
+    - master
