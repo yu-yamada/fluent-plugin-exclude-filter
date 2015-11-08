@@ -1,4 +1,6 @@
 # fluent-plugin-exclude-filter, a plugin for [Fluentd](http://fluentd.org) 
+[![Build Status](https://travis-ci.org/yu-yamada/fluent-plugin-exclude-filter.svg?branch=master)](https://travis-ci.org/yu-yamada/fluent-plugin-exclude-filter)
+
 
 exclude some records.
 
