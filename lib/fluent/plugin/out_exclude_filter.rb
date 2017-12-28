@@ -2,6 +2,11 @@ require 'yaml'
 class Fluent::ExcludeFilterOutput < Fluent::Output
   Fluent::Plugin.register_output('exclude_filter', self)
 
+  # Define `router` method of v0.12 to support v0.10 or earlier
+  unless method_defined?(:router)
+    define_method("router") { Fluent::Engine }
+  end
+
   config_param :key, :string, :default => nil
   config_param :value, :string, :default => nil
   config_param :file_path, :string, :default => nil
@@ -43,7 +48,7 @@ class Fluent::ExcludeFilterOutput < Fluent::Output
         next if yml_match(record)
       end 
 
-      Fluent::Engine.emit(emit_tag, time, record)
+      router.emit(emit_tag, time, record)
     end
 
     chain.next
