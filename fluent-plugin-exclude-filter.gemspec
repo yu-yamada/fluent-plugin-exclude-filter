@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-exclude-filter"
-  spec.version       = "0.0.1" 
+  spec.version       = "0.0.2" 
   spec.authors       = ["yu yamada"]
   spec.email         = ["yu.yamada07@gmail.com"]
   spec.description   = %q{Output filter plugin to exclude records}
